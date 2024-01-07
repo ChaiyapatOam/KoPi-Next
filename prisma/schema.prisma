@@ -13,6 +13,7 @@ model Session {
   userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("session")
 }
 
@@ -37,12 +38,15 @@ model Account {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  email    String?   @unique
+  image    String?
+  phone    String?
+  accounts Account[]
+  sessions Session[]
+  Product  Product[]
+  Group    Group[]   @relation("user")
 
   @@map("user")
 }
@@ -54,4 +58,25 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Group {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?   @db.String
+  merchant_name String
+  userId        String?   @unique @db.ObjectId
+  createdBy     String
+  user          User?     @relation("user", fields: [userId], references: [id])
+  Product       Product[]
+}
+
+model Product {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  price    Int
+  quantity Int
+  userId   String  @db.ObjectId
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId  String  @db.ObjectId
+  group    Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }

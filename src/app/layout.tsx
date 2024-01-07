@@ -20,7 +20,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={IBM.className}>{children}</body>
+      <body className={IBM.className}>
+        {children}
+        <footer className="absolute bottom-0 pl-4">
+          Built by{" "}
+          <a
+            href="https://ui.shadcn.com/"
+            className="underline"
+            target="_blank"
+          >
+            shadcn
+          </a>
+        </footer>
+      </body>
     </html>
   )
 }

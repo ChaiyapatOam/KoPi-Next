@@ -1,9 +1,14 @@
 import { SessionProvider } from "next-auth/react"
-import User from "./User"
+import UserSession from "./User-Session"
 import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 const UserPage = async () => {
   const session = await auth()
+  
+  if (!session) {
+    redirect("/")
+  }
 
   if (session?.user) {
     session.user = {
@@ -16,7 +21,7 @@ const UserPage = async () => {
 
   return (
     <SessionProvider session={session}>
-      <User />
+      <UserSession />
     </SessionProvider>
   )
 }
